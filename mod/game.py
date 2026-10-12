@@ -15,8 +15,21 @@ import openpyxl
 
 
 # New game state (stored in st.session_state)
+def find_configuration(level_key):
+    # Accepts '2', 2, 'Medium' or a label like 'Medium (12)'; Medium if nothing matches
+    text = str(level_key).strip()
+    if text in difficulty:
+        return difficulty[text]
+    for config in difficulty.values():
+        if text.startswith(config['level']):
+            return config
+    return difficulty['2']
+
+
 def new_game(mode, level_key, secret_number=None):
-    configuration = difficulty[level_key]
+    configuration = find_configuration(level_key)
+    if mode not in ("Single", "Double"):
+        mode = "Single"
 
     if secret_number is None:
         secret_number = random.randint(min_num, max_num)

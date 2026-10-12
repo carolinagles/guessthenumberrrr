@@ -7,7 +7,7 @@ Settings
 - Range of number to guess (1-1000)
 - Score points per difficulty
 - Heat levels for the hot/cold meter
-- Shell colors (translucent 90s computer flavors)
+- Color palette and glass shell colors
 """
 
 import os
@@ -58,11 +58,20 @@ heat_levels = [
     (max_num, "Freezing", 12)
 ]
 
-# Shell colors: rgb → translucent shell, deep → shadows and outlines
+# Palette
+palette = {
+    'sage': '#99B898',
+    'peach': '#FECEA8',
+    'salmon': '#FF847C',
+    'coral': '#E84A5F',
+    'slate': '#2A363B'
+}
+
+# Shell colors (from the palette)
+# rgb → glass tint, deep → shadows and outlines, text → text on top of the color
 flavors = {
-    'Lagoon': {'emoji': '🔵', 'rgb': (31, 163, 201), 'deep': (8, 92, 122)},
-    'Grape': {'emoji': '🟣', 'rgb': (123, 63, 184), 'deep': (70, 28, 115)},
-    'Tangerine': {'emoji': '🟠', 'rgb': (255, 138, 30), 'deep': (176, 78, 0)},
-    'Lime': {'emoji': '🟢', 'rgb': (61, 190, 76), 'deep': (24, 112, 38)},
-    'Cherry': {'emoji': '🔴', 'rgb': (226, 36, 94), 'deep': (138, 12, 52)}
+    'Sage': {'rgb': (153, 184, 152), 'deep': (74, 110, 74), 'text': '#2A363B'},
+    'Peach': {'rgb': (254, 206, 168), 'deep': (176, 110, 60), 'text': '#2A363B'},
+    'Salmon': {'rgb': (255, 132, 124), 'deep': (168, 58, 52), 'text': '#2A363B'},
+    'Coral': {'rgb': (232, 74, 95), 'deep': (130, 22, 40), 'text': '#FFFFFF'}
 }

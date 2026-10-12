@@ -5,7 +5,7 @@ Guess the Number (1-1000) - Streamlit App
 - Three difficulty levels
 - Range scanner, hot/cold meter and one hint per game
 - Score, game history recording and results visualization
-- Five translucent shell colors
+- Liquid glass shell in four palette colors, WordArt title
 
 Run:
 streamlit run app.py
@@ -21,10 +21,10 @@ from mod.style import inject_style
 from mod import ui
 
 
-st.set_page_config(page_title="Guess the Number", page_icon="🕹️", layout="centered")
+st.set_page_config(page_title="Guess the Number", layout="centered")
 
 # Session state
-defaults = {'game': None, 'page': "Play", 'flavor': "Lagoon",
+defaults = {'game': None, 'page': "Play", 'flavor': "Salmon",
             'mode_choice': "Single", 'level_choice': '2',
             'setup_error': None, 'save_error': None}
 for key, value in defaults.items():
@@ -37,7 +37,8 @@ inject_style(flavor)
 
 # Callbacks (run before the screen is drawn, so the LCD is always up to date)
 def start_game():
-    mode = st.session_state.mode_choice
+    mode = st.session_state.get('mode_choice') or "Single"
+    level_key = st.session_state.get('level_choice') or '2'
     secret_number = None
 
     if mode == "Double":
@@ -46,7 +47,7 @@ def start_game():
             st.session_state.setup_error = error
             return
 
-    st.session_state.game = new_game(mode, st.session_state.level_choice, secret_number)
+    st.session_state.game = new_game(mode, level_key, secret_number)
     st.session_state.secret_input = ""
     st.session_state.setup_error = None
     st.session_state.save_error = None
@@ -86,8 +87,7 @@ with menu_col:
                          required=True, label_visibility="collapsed")
 with color_col:
     st.segmented_control("Shell color", list(flavors), key="flavor", required=True,
-                         format_func=lambda name: flavors[name]['emoji'],
-                         help="Change the shell color", label_visibility="collapsed")
+                                                  help="Change the shell color", label_visibility="collapsed")
 
 
 # Play: setup screen

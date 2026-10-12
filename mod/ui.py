@@ -68,7 +68,7 @@ def lcd(game):
         f'<div class="lcd-big">{big}</div>'
         f'<div class="lcd-feedback {feedback["kind"]}">{html.escape(feedback["text"])}</div>'
         '</div>'
-        '<div class="lcd-brand"><span>Dot matrix</span><span>&#9679; Power</span></div>'
+        '<div class="lcd-brand"><span>Dot matrix</span><span>Power</span></div>'
         '</div>'
     )
 
@@ -117,7 +117,7 @@ def history(game):
             start, end = entry['block']
             chips.append(f'<span class="chip hint">hint {start}–{end}</span>')
         else:
-            arrow = {'up': '↑', 'down': '↓', 'hit': '★'}[entry['direction']]
+            arrow = {'up': '↑', 'down': '↓', 'hit': '='}[entry['direction']]
             chips.append(f'<span class="chip {entry["direction"]}">{entry["guess"]} {arrow}</span>')
 
     body = "".join(chips) if chips else '<span class="empty-note">Your guesses show up here.</span>'

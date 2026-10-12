@@ -75,8 +75,8 @@ def _retro_axes(ax):
     ax.set_facecolor((1, 1, 1, 0.55))
     for side in ['top', 'right', 'left']:
         ax.spines[side].set_visible(False)
-    ax.spines['bottom'].set_color('#1F2430')
-    ax.tick_params(colors='#1F2430')
+    ax.spines['bottom'].set_color('#2A363B')
+    ax.tick_params(colors='#2A363B')
     ax.title.set_fontfamily('monospace')
     ax.title.set_fontweight('bold')
 
@@ -112,8 +112,8 @@ def player_performance(df, flavor):
         losses_count.head(10).plot.bar(
             ax=ax2,
             title="Most Losses",
-            color=["#AEB6C1"],
-            edgecolor=["#5A6270"],
+            color=["#2A363B"],
+            edgecolor=["#2A363B"],
             linewidth=1.5
         )
         ax2.set_ylabel("Losses")
@@ -134,7 +134,7 @@ def player_performance(df, flavor):
 
 # Pie charts
 def games_pie_chart(df, flavor):
-    color_map = {'Won': _rgb(flavor['rgb']), 'Lost': (0.93, 0.94, 0.95, 1)}
+    color_map = {'Won': _rgb(flavor['rgb']), 'Lost': (0.165, 0.212, 0.231, 0.85)}
     fig, axes = plt.subplots(1, 3, figsize=(12, 3.8))
     fig.patch.set_alpha(0)
 
@@ -150,16 +150,21 @@ def games_pie_chart(df, flavor):
             ax.text(0.5, 0.5, 'No games yet', ha='center', va='center', transform=ax.transAxes)
             ax.axis('off')
         else:
-            counts.plot.pie(
-                ax=ax,
+            wedges, texts, autotexts = ax.pie(
+                counts.values,
+                labels=counts.index,
                 colors=[color_map.get(label, (0.7, 0.7, 0.7, 1)) for label in counts.index],
                 autopct='%1.0f%%',
                 startangle=90,
-                wedgeprops={'edgecolor': _rgb(flavor['deep']), 'linewidth': 1.5},
-                textprops={'fontfamily': 'monospace', 'color': '#1F2430'}
+                wedgeprops={'edgecolor': (1, 1, 1, 0.9), 'linewidth': 2},
+                textprops={'fontfamily': 'monospace', 'color': '#2A363B'}
             )
+            # Percent text readable on each slice
+            for label, autotext in zip(counts.index, autotexts):
+                autotext.set_color(flavor['text'] if label == 'Won' else '#FFFFFF')
+                autotext.set_fontweight('bold')
             ax.set_ylabel('')
-        ax.set_title(title, fontfamily='monospace', fontweight='bold', color='#1F2430')
+        ax.set_title(title, fontfamily='monospace', fontweight='bold', color='#2A363B')
 
     plt.tight_layout()
     return fig

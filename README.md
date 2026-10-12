@@ -1,10 +1,11 @@
 # Guess the Number
 
-A retro Streamlit version of the console game: a translucent candy-colored shell, a pearl white bezel and a handheld-style LCD screen.
+A retro Streamlit version of the console game: a liquid glass shell, a lilac WordArt title and a handheld-style LCD screen.
 
 **Main Structure:**
 - **Menu** with 3 screens: Play, Records, Rules
-- **Shell color** picker: Lagoon, Grape, Tangerine, Lime, Cherry
+- **Palette**: sage #99B898, peach #FECEA8, salmon #FF847C, coral #E84A5F, slate #2A363B
+- **Shell color** picker: Sage, Peach, Salmon, Coral
 - **Mode and difficulty** before each game: Single or Two players, Easy (20 tries), Medium (12 tries), Hard (5 tries)
 
 **Game Rules:**
@@ -39,7 +40,7 @@ mod/
   game.py           # game logic, score and save_record
   records.py        # statistics, leaderboard and charts
   ui.py             # screen pieces (LCD, range bar, heat meter, tables)
-  style.py          # retro translucent CSS
+  style.py          # liquid glass + WordArt CSS
 data/statistics.xlsx
 requirements.txt
 .streamlit/config.toml
