@@ -12,7 +12,8 @@ streamlit run app.py
 """
 
 import streamlit as st
-from mod.settings import difficulty, flavors, min_num, max_num, hint_cost
+from mod.settings import (difficulty, flavors, min_num, max_num, hint_cost,
+                          background_gif, background_light)
 from mod.game import (new_game, validate_secret, play_turn, use_hint, can_use_hint,
                       attempts_used, game_score, save_record)
 from mod.records import (load_statistics, summary_stats, leaderboard, last_games,
@@ -32,7 +33,7 @@ for key, value in defaults.items():
         st.session_state[key] = value
 
 flavor = flavors[st.session_state.flavor]
-inject_style(flavor)
+inject_style(flavor, background_gif, background_light)
 
 
 # Callbacks (run before the screen is drawn, so the LCD is always up to date)

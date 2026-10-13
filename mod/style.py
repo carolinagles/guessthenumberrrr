@@ -1,7 +1,7 @@
 """
 Style
 
-- Liquid glass shell over a blurred palette background
+- Liquid glass shell over an animated bubbles GIF (lightened)
 - Lilac WordArt title
 - Handheld-console LCD screen in sage and slate
 - Chunky glass press buttons
@@ -32,14 +32,12 @@ css = """
   --mono: 'VT323', ui-monospace, monospace;
 }
 
-/* Page: blurred palette backdrop */
+/* Page: animated liquid bubbles, lightened with a white glass layer */
 .stApp {
   background:
-    radial-gradient(520px 340px at 12% 22%, rgba(254,206,168,.55) 0%, transparent 70%),
-    radial-gradient(560px 380px at 88% 48%, rgba(232,74,95,.45) 0%, transparent 70%),
-    radial-gradient(620px 420px at 30% 78%, rgba(255,132,124,.40) 0%, transparent 70%),
-    linear-gradient(180deg, #99B898 0%, #B9C7A6 18%, #FECEA8 38%, #FF847C 58%, #E84A5F 72%, #2A363B 100%);
-  background-attachment: fixed;
+    linear-gradient(180deg, rgba(255,255,255,__LIGHT__) 0%, rgba(255,255,255,__LIGHT__) 100%),
+    url("__GIF__") center / cover no-repeat fixed,
+    #C9C6F4;
   color: var(--ink);
 }
 header[data-testid="stHeader"] { background: transparent; }
@@ -307,8 +305,10 @@ header[data-testid="stHeader"] { background: transparent; }
 """
 
 
-def inject_style(flavor):
+def inject_style(flavor, background_gif, background_light):
     shell = ",".join(str(value) for value in flavor['rgb'])
     deep = ",".join(str(value) for value in flavor['deep'])
     st.markdown(css.replace("__SHELL__", shell).replace("__DEEP__", deep)
-                .replace("__TEXT__", flavor['text']), unsafe_allow_html=True)
+                .replace("__TEXT__", flavor['text'])
+                .replace("__GIF__", background_gif)
+                .replace("__LIGHT__", str(background_light)), unsafe_allow_html=True)

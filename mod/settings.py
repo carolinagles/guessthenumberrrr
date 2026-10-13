@@ -8,6 +8,7 @@ Settings
 - Score points per difficulty
 - Heat levels for the hot/cold meter
 - Color palette and glass shell colors
+- Animated GIF background
 """
 
 import os
@@ -66,6 +67,11 @@ palette = {
     'coral': '#E84A5F',
     'slate': '#2A363B'
 }
+
+# Animated background (liquid bubbles) and how much white goes on top (0 = original, 1 = white)
+background_gif = ("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnN6YTViaWl2OGpjdWo2enNyMnU4dGkz"
+                  "d3lhOTZmMzZuMHdsMzJmcCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3Z1b8Z5ESU2fgScGab/giphy.gif")
+background_light = 0.35
 
 # Shell colors (from the palette)
 # rgb → glass tint, deep → shadows and outlines, text → text on top of the color
