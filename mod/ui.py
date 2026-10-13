@@ -68,7 +68,7 @@ def lcd(game):
         f'<div class="lcd-big">{big}</div>'
         f'<div class="lcd-feedback {feedback["kind"]}">{html.escape(feedback["text"])}</div>'
         '</div>'
-        '<div class="lcd-brand"><span>Number machine</span><span>Power</span></div>'
+        '<div class="lcd-brand"><span>Number machine</span><span>Power<i aria-hidden="true"></i></span></div>'
         '</div>'
     )
 
@@ -93,18 +93,25 @@ def range_bar(game):
     )
 
 
-# Hot/cold meter (distance of the last guess)
+# Hot/cold meter: five LEDs, one per heat level
+LED_COLORS = ["#99B898", "#d8cf9c", "#FECEA8", "#FF847C", "#E84A5F"]
+
+
 def heat_meter(game):
     entry = last_guess(game)
     if entry is None:
-        label, fill = "No reading", 0
+        label, lit = "No reading", 0
     else:
-        label, fill = entry['heat'], entry['fill']
+        label, lit = entry['heat'], max(1, round(entry['fill'] / 20))
 
+    leds = "".join(
+        f'<span class="led{" on" if i < lit else ""}" style="--c:{color}"></span>'
+        for i, color in enumerate(LED_COLORS)
+    )
     return (
         part_name("Heat")
         + '<div class="heat-row">'
-        + f'<div class="track"><div class="heat-fill" style="width:calc({fill}% - 6px)"></div></div>'
+        + f'<div class="heat-leds" role="img" aria-label="Heat: {label}">{leds}</div>'
         + f'<div class="heat-label">{label}</div></div>'
     )
 

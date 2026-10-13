@@ -82,14 +82,9 @@ def go_to_records():
 # Header and menus
 st.markdown(ui.bezel(), unsafe_allow_html=True)
 
-menu_col = st.container()
-color_col = st.expander("Shell color", expanded=False)
-with menu_col:
+with st.container(key="nav"):
     st.segmented_control("Menu", ["Play", "Records", "Rules"], key="page",
                          required=True, label_visibility="collapsed")
-with color_col:
-    st.segmented_control("Shell color", list(flavors), key="flavor", required=True,
-                                                  help="Change the shell color", label_visibility="collapsed")
 
 
 # Play: setup screen
@@ -218,3 +213,9 @@ elif st.session_state.page == "Records":
     records_screen()
 else:
     rules_screen()
+
+
+# Shell color lives at the bottom of the case
+with st.expander("Shell color", expanded=False):
+    st.segmented_control("Shell color", list(flavors), key="flavor", required=True,
+                         label_visibility="collapsed")
