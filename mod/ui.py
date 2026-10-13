@@ -5,6 +5,7 @@ Screen pieces (HTML)
 - LCD screen with attempts left
 - Range scanner and hot/cold meter
 - Guess history chips
+- Challenge card and challenge list
 - Stat tiles and retro tables
 """
 import html
@@ -122,6 +123,24 @@ def history(game):
 
     body = "".join(chips) if chips else '<span class="empty-note">Your guesses show up here.</span>'
     return part_name("Your guesses") + f'<div class="chips">{body}</div>'
+
+
+# Challenge card (after losing)
+def challenge_card(challenge, safety_note):
+    return ('<div class="challenge" role="status" aria-live="polite">'
+            f'<div class="challenge-type">{html.escape(challenge["category"])} challenge</div>'
+            f'<div class="challenge-text">{html.escape(challenge["text"])}</div>'
+            f'<div class="challenge-note">{html.escape(safety_note)}</div></div>')
+
+
+# Challenge list (Challenges screen)
+def challenge_list(challenges):
+    groups = []
+    for category, texts in challenges.items():
+        items = "".join(f"<li>{html.escape(text)}</li>" for text in texts)
+        groups.append(f'<div class="pearl challenge-group"><div class="part-name" style="margin-top:0">'
+                      f'{html.escape(category)}</div><ul>{items}</ul></div>')
+    return f'<div class="challenge-grid">{"".join(groups)}</div>'
 
 
 # Stat tiles

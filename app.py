@@ -4,6 +4,7 @@ Guess the Number (1-1000) - Streamlit App
 - Two game modes: single player or two players
 - Three difficulty levels
 - Range scanner, hot/cold meter and one hint per game
+- Random kid-friendly challenge when you lose
 - Score, game history recording and results visualization
 - Liquid glass shell in four palette colors, WordArt title
 
@@ -18,6 +19,7 @@ from mod.game import (new_game, validate_secret, play_turn, use_hint, can_use_hi
                       attempts_used, game_score, save_record)
 from mod.records import (load_statistics, summary_stats, leaderboard, last_games,
                          player_performance, games_pie_chart)
+from mod.challenges import challenges, safety_note, random_challenge
 from mod.style import inject_style
 from mod import ui
 
@@ -27,7 +29,8 @@ st.set_page_config(page_title="Guess the Number", layout="centered")
 # Session state
 defaults = {'game': None, 'page': "Play", 'flavor': "Salmon",
             'mode_choice': "Single", 'level_choice': '2',
-            'setup_error': None, 'save_error': None}
+            'setup_error': None, 'save_error': None,
+            'challenge': None}
 for key, value in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = value
@@ -49,6 +52,7 @@ def start_game():
             return
 
     st.session_state.game = new_game(mode, level_key, secret_number)
+    st.session_state.challenge = None
     st.session_state.secret_input = ""
     st.session_state.setup_error = None
     st.session_state.save_error = None
@@ -74,6 +78,10 @@ def save_game():
     st.session_state.save_error = error
 
 
+def pick_challenge():
+    st.session_state.challenge = random_challenge(st.session_state.challenge)
+
+
 def go_to_records():
     st.session_state.game = None
     st.session_state.page = "Records"
@@ -82,9 +90,9 @@ def go_to_records():
 # Header and menus
 st.markdown(ui.bezel(), unsafe_allow_html=True)
 
-menu_col, color_col = st.columns([3, 2], vertical_alignment="bottom")
+menu_col, color_col = st.columns([1, 1.25], vertical_alignment="bottom")
 with menu_col:
-    st.segmented_control("Menu", ["Play", "Records", "Rules"], key="page",
+    st.segmented_control("Menu", ["Play", "Records", "Challenges", "Rules"], key="page",
                          required=True, label_visibility="collapsed")
 with color_col:
     st.segmented_control("Shell color", list(flavors), key="flavor", required=True,
@@ -134,6 +142,15 @@ def game_screen(game):
         quit_col.button("Quit game", on_click=quit_game, width="stretch")
 
     else:
+        # Lost: random challenge to do at home
+        if not game['guessed']:
+            st.markdown(ui.part_name("Lost? Time for a challenge"), unsafe_allow_html=True)
+            if st.session_state.challenge:
+                st.markdown(ui.challenge_card(st.session_state.challenge, safety_note), unsafe_allow_html=True)
+            label = "Another challenge" if st.session_state.challenge else "Random challenge"
+            st.button(label, on_click=pick_challenge, width="stretch",
+                      type="secondary" if st.session_state.challenge else "primary")
+
         if not game['saved']:
             label = "Enter your name" if game['mode'] == "Single" else "Name of the player who guessed"
             st.text_input(label, key="player_name", max_chars=24)
@@ -183,6 +200,18 @@ def records_screen():
     st.pyplot(games_pie_chart(df, flavor))
 
 
+# Challenges screen
+def challenges_screen():
+    st.markdown(ui.part_name("Random challenge"), unsafe_allow_html=True)
+    if st.session_state.challenge:
+        st.markdown(ui.challenge_card(st.session_state.challenge, safety_note), unsafe_allow_html=True)
+    st.button("Random challenge", type="primary", on_click=pick_challenge, width="stretch")
+
+    st.markdown(ui.part_name("All challenges"), unsafe_allow_html=True)
+    st.markdown(f'<p>Lose a game and you get one of these. {safety_note}</p>', unsafe_allow_html=True)
+    st.markdown(ui.challenge_list(challenges), unsafe_allow_html=True)
+
+
 # Rules screen
 def rules_screen():
     rows = "".join(
@@ -198,6 +227,8 @@ def rules_screen():
         f"Once per game you can ask for a hint: it shows which hundred the number is in "
         f"and costs {hint_cost} attempt. Repeated or out-of-range guesses don't use attempts.</p>"
         "<p>In two player mode, player 1 types the secret number hidden, then hands over to player 2.</p>"
+        "<p>If you lose, press Random challenge and do a quick challenge at home: "
+        "moving, silly, brain or helper challenges, all safe for kids.</p>"
         '</div>'
         '<div class="pearl table-wrap"><table class="retro-table"><thead><tr>'
         "<th>Difficulty</th><th class='num'>Attempts</th><th class='num'>Win points</th>"
@@ -215,5 +246,7 @@ if st.session_state.page == "Play":
         game_screen(st.session_state.game)
 elif st.session_state.page == "Records":
     records_screen()
+elif st.session_state.page == "Challenges":
+    challenges_screen()
 else:
     rules_screen()

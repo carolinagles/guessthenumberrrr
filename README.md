@@ -3,7 +3,7 @@
 A retro Streamlit version of the console game: a liquid glass shell, a lilac WordArt title and a handheld-style LCD screen.
 
 **Main Structure:**
-- **Menu** with 3 screens: Play, Records, Rules
+- **Menu** with 4 screens: Play, Records, Challenges, Rules
 - **Palette**: sage #99B898, peach #FECEA8, salmon #FF847C, coral #E84A5F, slate #2A363B
 - **Shell color** picker: Sage, Peach, Salmon, Coral
 - **Mode and difficulty** before each game: Single or Two players, Easy (20 tries), Medium (12 tries), Hard (5 tries)
@@ -17,6 +17,7 @@ A retro Streamlit version of the console game: a liquid glass shell, a lilac Wor
 - Repeated or out-of-range guesses don't use attempts
 - In two player mode, player 1 types the secret number hidden
 - Game ends when player guesses correctly or runs out of attempts
+- **Lost?** Press *Random challenge* for a kid-friendly challenge to do at home (Move, Silly, Brain, Helper)
 
 **Score:**
 | Difficulty | Win points | Per attempt left |
@@ -39,6 +40,7 @@ mod/
   settings.py       # file, difficulty, range, score, heat levels, colors
   game.py           # game logic, score and save_record
   records.py        # statistics, leaderboard and charts
+  challenges.py     # kid-friendly challenges and random pick
   ui.py             # screen pieces (LCD, range bar, heat meter, tables)
   style.py          # liquid glass + WordArt CSS
 data/statistics.xlsx
